@@ -1,6 +1,6 @@
 require File.expand_path(File.join(File.dirname(__FILE__), 'spec_helper'))
 
-RSpec.describe HTTParty do
+describe HTTParty do
   before(:each) do
     @klass = Class.new
     @klass.instance_eval { include HTTParty }
@@ -546,6 +546,14 @@ RSpec.describe HTTParty do
       normalizer = proc {}
       @klass.query_string_normalizer normalizer
       expect(@klass.default_options[:query_string_normalizer]).to eq(normalizer)
+    end
+  end
+
+  describe ".detect_mime_type" do
+    it "sets the detect_mime_type option" do
+      detect_mime_type = true
+      @klass.detect_mime_type detect_mime_type
+      expect(@klass.default_options[:detect_mime_type]).to eq(detect_mime_type)
     end
   end
 

@@ -369,6 +369,20 @@ module HTTParty
       default_options[:query_string_normalizer] = normalizer
     end
 
+    # Automatically detect the mime type of multipart requests
+    #
+    # @example Automatically detecting mime type
+    #   class ServiceWrapper
+    #     include HTTParty
+    #
+    #     detect_mime_type true
+    #   end
+    #
+    # @param [Boolean] True to automatically detect mime type, false by default.
+    def detect_mime_type(detect_mime_type)
+      default_options[:detect_mime_type] = detect_mime_type
+    end
+
     # Allows setting of SSL version to use. This only works in Ruby 1.9+.
     # You can get a list of valid versions from OpenSSL::SSL::SSLContext::METHODS.
     #

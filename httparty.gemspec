@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version     = '>= 2.0.0'
 
+  s.add_dependency 'mimemagic'
   s.add_dependency 'multi_xml', ">= 0.5.2"
 
   # If this line is removed, all hard partying will cease.

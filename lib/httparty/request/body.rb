@@ -1,11 +1,13 @@
 require_relative 'multipart_boundary'
+require 'mimemagic'
 
 module HTTParty
   class Request
     class Body
-      def initialize(params, query_string_normalizer: nil)
+      def initialize(params, query_string_normalizer: nil, detect_mime_type: false)
         @params = params
         @query_string_normalizer = query_string_normalizer
+        @detect_mime_type = detect_mime_type
       end
 
       def call
@@ -36,7 +38,7 @@ module HTTParty
           # https://github.com/jnunemaker/httparty/pull/585
           memo += %(; filename="#{File.basename(value.path)}") if file?(value)
           memo += "\r\n"
-          memo += "Content-Type: application/octet-stream\r\n" if file?(value)
+          memo += "Content-Type: #{determine_mime_type(value)}\r\n" if file?(value)
           memo += "\r\n"
           memo += file?(value) ? value.read : value.to_s
           memo += "\r\n"
@@ -71,6 +73,11 @@ module HTTParty
         else
           HashConversions.to_params(query)
         end
+      end
+
+      def determine_mime_type(object)
+        return 'application/octet-stream' unless @detect_mime_type
+        MimeMagic.by_path(object) || 'application/octet-stream'
       end
 
       attr_reader :params, :query_string_normalizer
